@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema(
     password: String,
     email: String,
     role: String,
+    tokens: [],
   },
   { timestamps: true }
 );

@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const mongoose = require("mongoose");
 const { MONGO_URI } = require("./config/keys");
