@@ -9,6 +9,7 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use("/users", require("./routes/users"));
+app.use("/posts", require("./routes/posts"));
 
 mongoose
   .connect(MONGO_URI, { useUnifiedTopology: true, useNewUrlParser: true })

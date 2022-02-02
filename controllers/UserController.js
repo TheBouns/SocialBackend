@@ -2,7 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const transporter = require("../config/nodemailer");
-const { $where } = require("../models/User");
 
 const secret = process.env.JWT_SECRET;
 
@@ -53,7 +52,9 @@ const UserController = {
       if (user.tokens.length > 4) user.tokens.shift();
       user.tokens.push(token);
       await user.save();
-      res.status(201).send({ message: "welcome" + user.name, token, user });
+      res
+        .status(201)
+        .send(`welcome  ${user.name.toUpperCase()} token: ${token}`);
     } catch (error) {
       console.log(error);
     }
