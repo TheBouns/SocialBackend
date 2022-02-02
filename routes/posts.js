@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const PostController = require("../controllers/PostController");
-const { authen } = require("../middleware/tokenValidation");
+const { auth } = require("../middleware/tokenValidation");
 
 router.get("/", PostController.find);
-router.post("/", authen, PostController.create);
-router.get("/:name", authen, PostController.findByName);
+router.get("/:title", auth, PostController.findByName);
+router.get("/id/:_id", auth, PostController.findById);
+router.post("/", auth, PostController.create);
+router.put("/:_id", PostController.update);
 
 module.exports = router;
