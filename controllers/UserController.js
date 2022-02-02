@@ -1,6 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const transporter = require("../config/nodemailer");
+const { $where } = require("../models/User");
+
 const secret = process.env.JWT_SECRET;
 
 const UserController = {
@@ -12,7 +15,20 @@ const UserController = {
     try {
       const hash = bcrypt.hashSync(req.body.password, 10);
       const user = await User.create({ ...req.body, password: hash });
-      res.status(201).send({ message: "user created succesfully", user });
+      const emailToken = jwt.sign({ email: req.body.email }, secret);
+      const url = "http://localhost:3000/users/confirm/" + emailToken;
+      await transporter.sendMail({
+        to: req.body.email,
+        subject: "Account verification",
+        html: `<h3>Bienvenido, estás a un paso de registrarte </h3>
+        <a href="${url}"> Click para confirmar tu registro</a>
+        `,
+      });
+
+      res.status(201).send({
+        message:
+          "user created succesfully, please checkout your mail for confirmation",
+      });
     } catch (error) {
       console.log(error);
       res.send("Something went wrong");
@@ -23,11 +39,14 @@ const UserController = {
     console.log(user);
     try {
       if (!user) {
-        console.log("user or password incorrect");
+        return console.log("user or password incorrect");
       }
       const match = bcrypt.compareSync(req.body.password, user.password);
       if (!match) {
-        res.status(201).send({ message: "user or password incorrect" });
+        return res.status(400).send({ message: "user or password incorrect" });
+      }
+      if (!user.verified) {
+        return res.status(400).send({ message: "Verify your account" });
       }
 
       token = jwt.sign({ _id: user._id }, secret);
@@ -45,6 +64,20 @@ const UserController = {
         $pull: { tokens: req.headers.authorization },
       });
       res.send({ message: "See you later alligator" });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async confirm(req, res) {
+    try {
+      const token = req.params.emailToken;
+      console.log(token);
+      const payload = jwt.verify(token, secret);
+      const user = await User.findOne({ email: payload.email });
+      user.verified = true;
+      user.save();
+      res.status(201).send(user);
     } catch (error) {
       console.log(error);
     }

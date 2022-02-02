@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema(
     email: String,
     role: String,
     tokens: [],
+    verified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
