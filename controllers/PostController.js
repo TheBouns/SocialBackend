@@ -53,6 +53,27 @@ const PostController = {
       console.log(error);
     }
   },
+  async like(req, res) {
+    try {
+      const post = await Post.findById(req.params._id);
+      post.likes++;
+      console.log(post.likes);
+      post.save();
+      res.send(post);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async dislike(req, res) {
+    try {
+      const post = await Post.findById(req.params._id);
+      if (post.likes != 0) post.likes--;
+      post.save();
+      res.send(post);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = PostController;

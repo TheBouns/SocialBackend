@@ -6,6 +6,10 @@ const PostSchema = new mongoose.Schema(
     title: String,
     description: String,
     img: String,
+    likes: {
+      type: Number,
+      default: 0,
+    },
     userId: {
       type: ObjectId,
       ref: "User",
