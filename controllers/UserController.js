@@ -1,9 +1,8 @@
-const { create } = require("../models/User");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
+
 const UserController = {
   async getAll(req, res) {
     const users = await User.find();
@@ -31,24 +30,25 @@ const UserController = {
         res.status(201).send({ message: "user or password incorrect" });
       }
 
-      token = jwt.sign({ id: user._id }, secret);
+      token = jwt.sign({ _id: user._id }, secret);
       if (user.tokens.length > 4) user.tokens.shift();
       user.tokens.push(token);
       await user.save();
-      res.status(201).send({ message: "welcome" + user.name, token });
+      res.status(201).send({ message: "welcome" + user.name, token, user });
     } catch (error) {
       console.log(error);
     }
   },
-  //   async logout(req, res) {
-  //     try {
-  //       const user = await User.deleteOne({ token: req.headers.authorization });
-  //       console.log(user);
-  //       res.status(201).send({ message: `logged out ${user.token}` });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   },
+  async logout(req, res) {
+    try {
+      await User.findByIdAndUpdate(req.user._id, {
+        $pull: { tokens: req.headers.authorization },
+      });
+      res.send({ message: "See you later alligator" });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = UserController;

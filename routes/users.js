@@ -1,11 +1,12 @@
 const express = require("express");
+const { verify } = require("jsonwebtoken");
 const router = express.Router();
 const UserController = require("../controllers/UserController");
-const authorization = require("../middleware/tokenValidation");
+const { authen } = require("../middleware/tokenValidation");
 
-router.get("/", authorization, UserController.getAll);
-router.post("/", authorization, UserController.create);
+router.get("/", UserController.getAll);
+router.post("/", UserController.create);
 router.post("/login", UserController.login);
-// router.put("/logout", UserController.logout);
+router.put("/logout", authen, UserController.logout);
 
 module.exports = router;
