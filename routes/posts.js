@@ -6,7 +6,8 @@ const { auth } = require("../middleware/tokenValidation");
 router.get("/", PostController.find);
 router.get("/:title", auth, PostController.findByName);
 router.get("/id/:_id", auth, PostController.findById);
+router.delete("/:_id", PostController.delete);
 router.post("/", auth, PostController.create);
-router.put("/:_id", PostController.update);
+router.put("/:_id", auth, PostController.update);
 
 module.exports = router;

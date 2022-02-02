@@ -38,7 +38,17 @@ const PostController = {
   },
   async findById(req, res) {
     try {
-      res.send(await Post.findById(req.params._id));
+      const post = await Post.findById(req.params._id);
+      if (!post) return res.send("post dosent exist");
+      res.send(post);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async delete(req, res) {
+    try {
+      await Post.findByIdAndDelete(req.params._id);
+      res.send("Post has been deleted");
     } catch (error) {
       console.log(error);
     }
