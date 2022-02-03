@@ -102,6 +102,44 @@ const UserController = {
       console.log(error);
     }
   },
+  async follow(req, res) {
+    try {
+      const user = await User.findByIdAndUpdate(req.params._id);
+      const logged = req.user._id.toString();
+      const followersId = user.followersId;
+      const followers = user.followers;
+      if (!user) return res.send("User not found");
+      if (followersId.indexOf(req.user._id) != -1) {
+        res.send("siguiendo");
+      } else {
+        followers.push(req.user.name);
+        followersId.push(logged);
+      }
+      user.save();
+      res.send(user);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  // async unfollow(req,res){
+  //   try {
+  //     const user = await User.findByIdAndUpdate(req.params._id);
+  //     const logged = req.user._id.toString();
+  //     const followersId = user.followersId;
+  //     const follower = user.followers;
+  //     if (!user) return res.send("User not found");
+  //     if (followersId.indexOf(req.user._id) != -1) {
+  //       res.send("siguiendo");
+  //     } else {
+  //       followers.push(req.user.name);
+  //       followersId.push(logged);
+  //     }
+  //     user.save();
+  //     res.send(user);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 };
 
 module.exports = UserController;

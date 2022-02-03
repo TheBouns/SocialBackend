@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.SchemaTypes.ObjectId;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -12,6 +13,7 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    followersId: [{ type: String, ref: "User" }],
   },
   { timestamps: true }
 );
@@ -21,6 +23,7 @@ UserSchema.methods.toJSON = function () {
   delete user.password;
   //delete user.verified;
   //delete user.role;
+  delete user.followersId;
   delete user.updatedAt;
   delete user.__v;
   return user;
