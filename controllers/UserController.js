@@ -83,6 +83,20 @@ const UserController = {
       console.log(error);
     }
   },
+  async findbyName(req, res) {
+    try {
+      const user = await User.aggregate([
+        {
+          $match: {
+            name: req.params.name,
+          },
+        },
+      ]);
+      res.send(user);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = UserController;
