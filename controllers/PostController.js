@@ -2,7 +2,11 @@ const Post = require("../models/Post");
 
 const PostController = {
   async find(req, res) {
-    res.send(await Post.find());
+    const { page = 1, limit = 10 } = req.query;
+    const posts = await Post.find()
+      .limit(limit)
+      .skip((page - 1) * limit);
+    res.send(posts);
   },
   async create(req, res) {
     try {
@@ -69,6 +73,26 @@ const PostController = {
       const post = await Post.findById(req.params._id);
       if (post.likes != 0) post.likes--;
       post.save();
+      res.send(post);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async insertcomment(req, res) {
+    try {
+      const post = await Post.findOneAndUpdate(
+        req.params._id,
+        {
+          $push: {
+            comments: {
+              ...req.body,
+              userId: req.user._id,
+              userName: req.user.name,
+            },
+          },
+        },
+        { new: true }
+      );
       res.send(post);
     } catch (error) {
       console.log(error);

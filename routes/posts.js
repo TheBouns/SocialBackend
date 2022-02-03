@@ -11,5 +11,6 @@ router.post("/dislikes/:_id", PostController.dislike);
 router.delete("/:_id", PostController.delete);
 router.post("/", auth, PostController.create);
 router.put("/:_id", auth, PostController.update);
+router.put("/comment/:_id", auth, PostController.insertcomment);
 
 module.exports = router;

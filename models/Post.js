@@ -10,6 +10,13 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    comments: [
+      {
+        userId: { type: ObjectId, ref: "User" },
+        userName: { type: String, ref: "User" },
+        comment: String,
+      },
+    ],
     userId: {
       type: ObjectId,
       ref: "User",
