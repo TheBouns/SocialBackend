@@ -59,11 +59,17 @@ const PostController = {
   },
   async like(req, res) {
     try {
-      const post = await Post.findById(req.params._id);
-      post.likes++;
-      console.log(post.likes);
-      post.save();
-      res.send(post);
+      const post = await Post.findByIdAndUpdate(req.params._id);
+      const user = post.userId.toString();
+      console.log(post);
+      if (post.liked.indexOf(user) == -1) {
+        post.liked.push(user);
+        post.likes++;
+        post.save();
+        return res.send({ message: "+1 like", post });
+      } else {
+        return res.send({ message: "Already like given" });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +77,11 @@ const PostController = {
   async dislike(req, res) {
     try {
       const post = await Post.findById(req.params._id);
-      if (post.likes != 0) post.likes--;
+      const user = post.userId.toString();
+      if (post.liked.indexOf(user) != -1) {
+        post.liked.splice(post.liked.indexOf(user), 1);
+        post.likes--;
+      }
       post.save();
       res.send(post);
     } catch (error) {
