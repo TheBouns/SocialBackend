@@ -61,7 +61,6 @@ const PostController = {
     try {
       const post = await Post.findByIdAndUpdate(req.params._id);
       const user = post.userId.toString();
-      console.log(post);
       if (post.liked.indexOf(user) == -1) {
         post.liked.push(user);
         post.likes++;

@@ -85,13 +85,18 @@ const UserController = {
   },
   async findbyName(req, res) {
     try {
-      const user = await User.aggregate([
-        {
-          $match: {
-            name: req.params.name,
-          },
-        },
-      ]);
+      const user = await User.find({
+        name: { $regex: req.params.name, $options: "i" },
+      });
+      res.send(user);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async findById(req, res) {
+    try {
+      const user = await User.findById(req.params._id);
+      if (!user) return res.send(`User not found`);
       res.send(user);
     } catch (error) {
       console.log(error);
