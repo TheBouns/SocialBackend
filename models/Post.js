@@ -6,11 +6,7 @@ const PostSchema = new mongoose.Schema(
     title: String,
     description: String,
     img: String,
-    likes: {
-      type: Number,
-      default: 0,
-      userId: { type: ObjectId, ref: "User" },
-    },
+    likes: [],
 
     comments: [
       {
@@ -23,7 +19,6 @@ const PostSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "User",
     },
-    liked: [],
   },
   { timestamps: true }
 );

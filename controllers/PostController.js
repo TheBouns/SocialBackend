@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 const PostController = {
   async find(req, res) {
@@ -14,6 +15,9 @@ const PostController = {
         ...req.body,
         userId: req.user._id,
         title: req.body.title.toLowerCase(),
+      });
+      await User.findByIdAndUpdate(req.user._id, {
+        $push: { postId: post._id },
       });
       res.send(post);
     } catch (error) {
@@ -61,9 +65,8 @@ const PostController = {
     try {
       const post = await Post.findByIdAndUpdate(req.params._id);
       const user = post.userId.toString();
-      if (post.liked.indexOf(user) == -1) {
-        post.liked.push(user);
-        post.likes++;
+      if (post.likes.indexOf(user) == -1) {
+        post.likes.push(user);
         post.save();
         return res.send({ message: "+1 like", post });
       } else {
@@ -77,9 +80,8 @@ const PostController = {
     try {
       const post = await Post.findById(req.params._id);
       const user = post.userId.toString();
-      if (post.liked.indexOf(user) != -1) {
-        post.liked.splice(post.liked.indexOf(user), 1);
-        post.likes--;
+      if (post.likes.indexOf(user) != -1) {
+        post.likes.splice(post.likes.indexOf(user), 1);
       }
       post.save();
       res.send(post);

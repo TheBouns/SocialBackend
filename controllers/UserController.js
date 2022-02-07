@@ -7,7 +7,7 @@ const secret = process.env.JWT_SECRET;
 
 const UserController = {
   async getAll(req, res) {
-    const users = await User.find();
+    const users = await User.find().populate("postId");
     res.send(users);
   },
   async create(req, res) {
@@ -109,8 +109,9 @@ const UserController = {
       const followersId = user.followersId;
       const followers = user.followers;
       if (!user) return res.send("User not found");
+      if (req.params._id == logged) return res.send("U cant follow urself");
       if (followersId.indexOf(req.user._id) != -1) {
-        res.send("siguiendo");
+        res.send("allready following this user");
       } else {
         followers.push(req.user.name);
         followersId.push(logged);
@@ -121,25 +122,33 @@ const UserController = {
       console.log(error);
     }
   },
-  // async unfollow(req,res){
-  //   try {
-  //     const user = await User.findByIdAndUpdate(req.params._id);
-  //     const logged = req.user._id.toString();
-  //     const followersId = user.followersId;
-  //     const follower = user.followers;
-  //     if (!user) return res.send("User not found");
-  //     if (followersId.indexOf(req.user._id) != -1) {
-  //       res.send("siguiendo");
-  //     } else {
-  //       followers.push(req.user.name);
-  //       followersId.push(logged);
-  //     }
-  //     user.save();
-  //     res.send(user);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async unfollow(req, res) {
+    try {
+      const user = await User.findByIdAndUpdate(req.params._id);
+      const logged = req.user._id.toString();
+      const exist = user.followersId.indexOf(logged);
+      console.log(user.followersId, logged);
+      if (exist != -1) {
+        user.followersId.splice(exist, 1);
+        user.followers.splice(exist, 1);
+        user.save();
+        res.send(user);
+      }
+
+      //res.send(user);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async myProfile(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(req.user._id).populate("postId");
+      user.followersId = user.followersId.length;
+      res.send(user);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = UserController;
