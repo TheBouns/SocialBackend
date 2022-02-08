@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema(
       },
     ],
     followersId: [{ type: String, ref: "User" }],
+    profileImg: {
+      type: String,
+      default: "creeper.jpg",
+    },
   },
   { timestamps: true }
 );

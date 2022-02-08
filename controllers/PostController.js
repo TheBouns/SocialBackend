@@ -14,6 +14,7 @@ const PostController = {
       const post = await Post.create({
         ...req.body,
         userId: req.user._id,
+        userName: req.user.name,
         title: req.body.title.toLowerCase(),
       });
       await User.findByIdAndUpdate(req.user._id, {
@@ -39,6 +40,7 @@ const PostController = {
       const post = await Post.findByIdAndUpdate(req.params._id, req.body, {
         new: true,
       });
+      post.img = req.file.originalname;
       res.status(201).send(post);
     } catch (error) {
       console.log(error);

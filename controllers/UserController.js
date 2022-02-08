@@ -2,6 +2,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const transporter = require("../config/nodemailer");
+const { update } = require("./PostController");
+const { find } = require("../models/User");
 
 const secret = process.env.JWT_SECRET;
 
@@ -12,6 +14,9 @@ const UserController = {
   },
   async create(req, res) {
     try {
+      req.file
+        ? (req.body.profileImg = req.file.filename)
+        : (req.body.profileImg = "default.jpg");
       const hash = bcrypt.hashSync(req.body.password, 10);
       const user = await User.create({ ...req.body, password: hash });
       const emailToken = jwt.sign({ email: req.body.email }, secret);
@@ -145,6 +150,20 @@ const UserController = {
       const user = await User.findOneAndUpdate(req.user._id).populate("postId");
       user.followersId = user.followersId.length;
       res.send(user);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async updateUser(req, res) {
+    try {
+      const userid = { _id: req.user._id };
+      const user = await User.updateOne(userid, req.body);
+      const userInfo = await User.findById(req.user._id);
+      if (req.file.originalname != userInfo.profileImg)
+        userInfo.profileImg = req.file.originalname;
+
+      userInfo.save();
+      res.send("User has been updated");
     } catch (error) {
       console.log(error);
     }
