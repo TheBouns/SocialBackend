@@ -1,3 +1,4 @@
+const { restart } = require("nodemon");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
@@ -93,20 +94,88 @@ const PostController = {
   },
   async insertcomment(req, res) {
     try {
-      const post = await Post.findOneAndUpdate(
-        req.params._id,
-        {
-          $push: {
-            comments: {
-              ...req.body,
-              userId: req.user._id,
-              userName: req.user.name,
+      if (!req.file) {
+        const post = await Post.findByIdAndUpdate(
+          req.params._id,
+          {
+            $push: {
+              comments: {
+                ...req.body,
+                userId: req.user._id,
+                userName: req.user.name,
+              },
             },
           },
-        },
-        { new: true }
-      );
-      res.send(post);
+          { new: true }
+        );
+        return res.send(post);
+      } else {
+        const post = await Post.findOneAndUpdate(
+          req.params._id,
+          {
+            $push: {
+              comments: {
+                ...req.body,
+                userId: req.user._id,
+                userName: req.user.name,
+                img: req.file.originalname,
+              },
+            },
+          },
+          { new: true }
+        );
+        return res.send(post);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async updateComment(req, res) {
+    try {
+      let post = await Post.findByIdAndUpdate(req.params._idPost);
+      const comments = post.comments;
+      for (let i = 0; i < comments.length; i++) {
+        idCheck = comments[i]._id.toString();
+        if (idCheck == req.params._id) {
+          if (!req.file) {
+            comments[i] = {
+              userId: req.user._id,
+              userName: req.user.name,
+              edited: true,
+              _id: req.params._id,
+              comment: req.body.comment,
+              img: "image no provided",
+            };
+          } else {
+            comments[i] = {
+              userId: req.user._id,
+              userName: req.user.name,
+              edited: true,
+              _id: req.params._id,
+              comment: req.body.comment,
+              img: req.file.originalname,
+            };
+          }
+        }
+      }
+      post.save();
+      res.send("comment updated");
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async deleteComment(req, res) {
+    try {
+      const post = await Post.findByIdAndUpdate(req.params._idPost);
+      let comments = post.comments;
+      for (let i = 0; i < comments.length; i++) {
+        const idCheck = comments[i]._id;
+        if (idCheck == req.params._id) {
+          comments = comments.splice(comments[i], 1);
+        }
+      }
+      post.save();
+      res.send("comment eliminated");
     } catch (error) {
       console.log(error);
     }

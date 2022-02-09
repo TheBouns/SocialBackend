@@ -18,6 +18,23 @@ router.put(
   uploadGenerator.single("img"),
   PostController.update
 );
-router.put("/comment/:_id", auth, PostController.insertcomment);
+router.post(
+  "/comment/:_id",
+  auth,
+  uploadGenerator.single("img"),
+  PostController.insertcomment
+);
+router.put(
+  "/comment/update/comment/:_idPost/:_id",
+  auth,
+  uploadGenerator.single("img"),
+
+  PostController.updateComment
+);
+router.put(
+  "/comment/update/delete/:_idPost/:_id",
+  auth,
+  PostController.deleteComment
+);
 
 module.exports = router;
