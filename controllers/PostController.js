@@ -180,6 +180,48 @@ const PostController = {
       console.log(error);
     }
   },
+  async like(req, res) {
+    try {
+      const post = await Post.findByIdAndUpdate(req.params._idPost);
+      let comments = post.comments;
+      const user = req.user._id.toString();
+      for (let i = 0; i < comments.length; i++) {
+        const idCheck = comments[i]._id;
+        if (idCheck == req.params._id) {
+          if (comments[i].likes.indexOf(req.user._id) != -1) {
+            res.send("like allready given");
+          } else {
+            comments[i].likes.push(user);
+          }
+        }
+      }
+      post.save();
+      res.send(post);
+    } catch (error) {}
+  },
+  async unlike(req, res) {
+    try {
+      const post = await Post.findByIdAndUpdate(req.params._idPost);
+      let comments = post.comments;
+
+      for (let i = 0; i < comments.length; i++) {
+        const idCheck = comments[i]._id;
+        console.log(comments[i]);
+        if (idCheck == req.params._id) {
+          const user = req.user._id.toString();
+          let arr = comments[i].likes;
+          console.log(arr);
+          if (arr.indexOf(user) != -1)
+            comments[i].likes.splice(arr.indexOf(user), 1);
+        }
+      }
+
+      post.save();
+      res.send(post);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = PostController;

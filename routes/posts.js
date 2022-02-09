@@ -36,5 +36,7 @@ router.put(
   auth,
   PostController.deleteComment
 );
+router.put("/comment/update/like/:_idPost/:_id", auth, PostController.like);
+router.put("/comment/update/unlike/:_idPost/:_id", auth, PostController.unlike);
 
 module.exports = router;
