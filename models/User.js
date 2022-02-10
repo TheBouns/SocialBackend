@@ -3,10 +3,24 @@ const ObjectId = mongoose.SchemaTypes.ObjectId;
 
 const UserSchema = new mongoose.Schema(
   {
-    name: String,
-    password: String,
-    email: String,
-    role: String,
+    name: {
+      type:String,
+      required: [true, "Please allow your name"],
+    },
+    password:{
+      type:String,
+      required: [true, "Pease set a password"],
+      minlength:4
+    },
+    email: {
+      type: String,
+      match: [/.+\@.+\..+/, "Este correo no es válido"],
+      required: [true, "Please set an email"],
+    },
+    role:{
+      type:String,
+      default:"admin"
+    },
     tokens: [],
     followers: [],
     verified: {

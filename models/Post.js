@@ -3,8 +3,16 @@ const ObjectId = mongoose.SchemaTypes.ObjectId;
 
 const PostSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
+    title: {
+      type:String,
+      required:[true, "please set a title"],
+      minlength:4
+    },
+    description:{
+      type: String,
+      required:[true, "please set a valid description"],
+      minlength:10
+    },
     img: String,
     likes: [],
 

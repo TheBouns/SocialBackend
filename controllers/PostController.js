@@ -197,7 +197,9 @@ const PostController = {
       }
       post.save();
       res.send(post);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   },
   async unlike(req, res) {
     try {
