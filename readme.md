@@ -32,14 +32,13 @@ module.exports ={
 
 ```
 By default alls user role is set by dafault ("admin") to start creating and making changes   to the data base.
-
-**LAST STEP ENJOY**
-
 ----------------------------------------------------------------------------------------------------------
 
 ## Endpoints:
 
 You have all endpoints information here : [https://documenter.getpostman.com/view/15043871/UVeMGNcU](https://documenter.getpostman.com/view/15043871/UVeMGNcU)
+
+**Remeber to change your header `authorization` with your user `token`**
 
 --------------------------------------------------------------------
 
