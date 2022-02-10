@@ -1,5 +1,6 @@
-# Ecommerce Database : 
-This is a simple database for an ecommerce developed with Node.js:
+# Social Network: 
+This is a simple database for a social network developed with Node.js and mongoDB. 
+U can create your profile, add friends,create posts , give them like and more.
 ## Geting Started 🚀
 - Clone this repository `https://github.com/TheBouns/SocialBackend.git`
 - Install the dependencies `npm install`
@@ -13,10 +14,11 @@ This is a simple database for an ecommerce developed with Node.js:
     * Server runs at [https://localhost:3000](https://localhost:3000) (by default).
     * Automatically restarts when any of your files change
 
-## Databases
+## Database:
 
 By default the template is configured to connect to a MongoDB database.
 The database has 2 collections: users,posts.
+Feel free to create new collections.
 
 ## Starting with the project🌟🌟
 
@@ -29,7 +31,7 @@ module.exports ={
 }
 
 ```
-By default alls user role is set by dafefault ("admin") to start creating and making changes   to the data base.
+By default alls user role is set by dafault ("admin") to start creating and making changes   to the data base.
 
 **LAST STEP ENJOY**
 
@@ -37,7 +39,7 @@ By default alls user role is set by dafefault ("admin") to start creating and ma
 
 ## Endpoints:
 
-You have all endpoints information here : [https://documenter.getpostman.com/view/15043871/UVeMGN](https://documenter.getpostman.com/view/15043871/UVeMGN)
+You have all endpoints information here : [https://documenter.getpostman.com/view/15043871/UVeMGNcU](https://documenter.getpostman.com/view/15043871/UVeMGNcU)
 
 --------------------------------------------------------------------
 
@@ -51,5 +53,7 @@ You have all endpoints information here : [https://documenter.getpostman.com/vie
 - **Nodemailer** / **jsonwebtoken**
 - **Postman**
 --------------------------------------------------------------------
+## Created with love ❤❤ by TheBouns
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
