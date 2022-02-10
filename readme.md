@@ -40,7 +40,8 @@ You have all endpoints information here : [https://documenter.getpostman.com/vie
 
 **Remeber to change your header `authorization` with your user `token`**
 
-Test also the endpoints in heroku [https://socialnetworkmongodb.herokuapp.com/](link to heroku)
+Test also the endpoints in heroku [https://socialnetworkmongodb.herokuapp.com/]
+(https://socialnetworkmongodb.herokuapp.com/)
 
 --------------------------------------------------------------------
 
