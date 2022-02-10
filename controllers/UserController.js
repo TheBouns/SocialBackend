@@ -2,8 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const transporter = require("../config/nodemailer");
-const { update } = require("./PostController");
-const { find } = require("../models/User");
 
 const secret = process.env.JWT_SECRET;
 
@@ -34,13 +32,12 @@ const UserController = {
           "user created succesfully, please checkout your mail for confirmation",
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.send("Something went wrong");
     }
   },
   async login(req, res) {
     const user = await User.findOne({ email: req.body.email });
-    console.log(user);
     try {
       if (!user) {
         return console.log("user or password incorrect");
@@ -61,7 +58,7 @@ const UserController = {
         .status(201)
         .send(`welcome  ${user.name.toUpperCase()} token: ${token}`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async logout(req, res) {
@@ -71,21 +68,20 @@ const UserController = {
       });
       res.send({ message: "See you later alligator" });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
 
   async confirm(req, res) {
     try {
       const token = req.params.emailToken;
-      console.log(token);
       const payload = jwt.verify(token, secret);
       const user = await User.findOne({ email: payload.email });
       user.verified = true;
       user.save();
       res.status(201).send(user);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async findbyName(req, res) {
@@ -95,7 +91,7 @@ const UserController = {
       });
       res.send(user);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async findById(req, res) {
@@ -104,7 +100,7 @@ const UserController = {
       if (!user) return res.send(`User not found`);
       res.send(user);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async follow(req, res) {
@@ -124,7 +120,7 @@ const UserController = {
       user.save();
       res.send(user);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async unfollow(req, res) {
@@ -132,17 +128,14 @@ const UserController = {
       const user = await User.findByIdAndUpdate(req.params._id);
       const logged = req.user._id.toString();
       const exist = user.followersId.indexOf(logged);
-      console.log(user.followersId, logged);
       if (exist != -1) {
         user.followersId.splice(exist, 1);
         user.followers.splice(exist, 1);
         user.save();
-        res.send(user);
+        res.send("You are not following this user anymore");
       }
-
-      //res.send(user);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async myProfile(req, res) {
@@ -151,7 +144,7 @@ const UserController = {
       user.followersId = user.followersId.length;
       res.send(user);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async updateUser(req, res) {
@@ -165,7 +158,7 @@ const UserController = {
       userInfo.save();
       res.send("User has been updated");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
 };

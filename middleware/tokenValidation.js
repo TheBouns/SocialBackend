@@ -14,7 +14,7 @@ const auth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 const author = async (req, res, next) => {
@@ -25,7 +25,7 @@ const author = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 const Admin = async (req, res, next) => {
@@ -33,13 +33,13 @@ const Admin = async (req, res, next) => {
     const token = req.headers.authorization;
     const payload = jwt.verify(token, secret);
     const user = await User.findOne({ _id: payload._id });
-    console.log(user);
+    console.error(user);
     if (user.role != "admin") {
       return res.send("Forbidden");
     }
     next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

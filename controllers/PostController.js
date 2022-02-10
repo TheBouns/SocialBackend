@@ -1,4 +1,3 @@
-const { restart } = require("nodemon");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
@@ -23,7 +22,7 @@ const PostController = {
       });
       res.send(post);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async findByName(req, res) {
@@ -44,7 +43,7 @@ const PostController = {
       post.img = req.file.originalname;
       res.status(201).send(post);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async findById(req, res) {
@@ -53,7 +52,7 @@ const PostController = {
       if (!post) return res.send("post dosent exist");
       res.send(post);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async delete(req, res) {
@@ -61,7 +60,7 @@ const PostController = {
       await Post.findByIdAndDelete(req.params._id);
       res.send("Post has been deleted");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async like(req, res) {
@@ -76,7 +75,7 @@ const PostController = {
         return res.send({ message: "Already like given" });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async dislike(req, res) {
@@ -89,7 +88,7 @@ const PostController = {
       post.save();
       res.send(post);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async insertcomment(req, res) {
@@ -127,7 +126,7 @@ const PostController = {
         return res.send(post);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async updateComment(req, res) {
@@ -161,7 +160,7 @@ const PostController = {
       post.save();
       res.send("comment updated");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async deleteComment(req, res) {
@@ -177,7 +176,7 @@ const PostController = {
       post.save();
       res.send("comment eliminated");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
   async like(req, res) {
@@ -198,7 +197,7 @@ const PostController = {
       post.save();
       res.send(post);
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async unlike(req, res) {
@@ -208,11 +207,9 @@ const PostController = {
 
       for (let i = 0; i < comments.length; i++) {
         const idCheck = comments[i]._id;
-        console.log(comments[i]);
         if (idCheck == req.params._id) {
           const user = req.user._id.toString();
           let arr = comments[i].likes;
-          console.log(arr);
           if (arr.indexOf(user) != -1)
             comments[i].likes.splice(arr.indexOf(user), 1);
         }
@@ -221,7 +218,7 @@ const PostController = {
       post.save();
       res.send(post);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
 };
