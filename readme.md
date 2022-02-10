@@ -53,7 +53,7 @@ You have all endpoints information here : [https://documenter.getpostman.com/vie
 - **Nodemailer** / **jsonwebtoken**
 - **Postman**
 --------------------------------------------------------------------
-## Created with love ❤❤ by TheBouns
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+#### Created with love ❤❤ by TheBouns
