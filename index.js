@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 const { MONGO_URI } = require("./config/keys");
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use("/users", require("./routes/users"));
