@@ -5,8 +5,10 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 const { MONGO_URI } = require("./config/keys");
-const PORT = process.env.PORT;
+const PORT = 3005;
+const cors = require('cors')
 
+app.use(cors())
 app.use(express.json());
 app.use("/users", require("./routes/users"));
 app.use("/posts", require("./routes/posts"));

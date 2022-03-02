@@ -16,9 +16,9 @@ const UserController = {
         ? (req.body.profileImg = req.file.filename)
         : (req.body.profileImg = "default.jpg");
       const hash = bcrypt.hashSync(req.body.password, 10);
-      const user = await User.create({ ...req.body, password: hash });
+      await User.create({ ...req.body, password: hash });
       const emailToken = jwt.sign({ email: req.body.email }, secret);
-      const url = "http://localhost:3000/users/confirm/" + emailToken;
+      const url = "http://localhost:3005/users/confirm/" + emailToken;
       await transporter.sendMail({
         to: req.body.email,
         subject: "Account verification",
@@ -56,7 +56,7 @@ const UserController = {
       await user.save();
       res
         .status(201)
-        .send(`welcome  ${user.name.toUpperCase()} token: ${token}`);
+        .send({message: `welcome  ${user.name.toUpperCase()} `, token });
     } catch (error) {
       console.error(error);
     }
